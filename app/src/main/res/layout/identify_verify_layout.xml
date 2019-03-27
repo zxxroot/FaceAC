@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/submit"
-        android:layout_below="@id/lltop"
+        android:layout_below="@+id/lltop"
         android:layout_marginBottom="@dimen/dimen_10"
         android:fadingEdge="none"
         android:overScrollMode="never"
@@ -24,67 +24,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_below="@id/scrollview"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/input_id_card_info"
-                android:gravity="center|left"
-                android:paddingBottom="@dimen/dimen_06"
-                android:paddingLeft="@dimen/dimen_10"
-                android:paddingTop="@dimen/dimen_06"
-                android:text="@string/input_id_card_info"
-                android:textColor="@color/bg_color"
-                android:textSize="@dimen/size_16" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/dimen_07">
-
-                <EditText
-                    android:id="@+id/etName"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_25"
-                    android:background="@null"
-                    android:hint="@string/input_name_hint"
-                    android:paddingLeft="@dimen/dimen_10"
-                    android:textColor="@color/bg_color"
-                    android:textColorHint="@color/text_hint_color"
-                    android:textSize="@dimen/size_16" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_005"
-                android:background="@color/horizontal_line" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="@dimen/dimen_07">
-
-                <EditText
-                    android:id="@+id/etIdCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_25"
-                    android:background="@null"
-                    android:hint="@string/input_id_card_hint"
-                    android:paddingLeft="@dimen/dimen_10"
-                    android:textColor="@color/bg_color"
-                    android:textColorHint="@color/text_hint_color"
-                    android:textSize="@dimen/size_16" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_005"
-                android:background="@color/horizontal_line" />
 
             <RelativeLayout
                 android:id="@+id/ivIdCardFront"
@@ -92,7 +33,7 @@
                 android:layout_height="170dip"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_10"
-                android:background="@drawable/idcard_example_front">
+                android:background="@drawable/ic_front_bright">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -131,11 +72,11 @@
                     android:id="@+id/imageViewFront"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="@dimen/dimen_03"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/dimen_15"
                     android:layout_marginRight="@dimen/dimen_03"
+                    android:layout_marginBottom="@dimen/dimen_03"
                     android:paddingLeft="@dimen/dimen_10"
                     android:src="@drawable/authentication_example_ok" />
             </RelativeLayout>
@@ -147,7 +88,7 @@
                 android:layout_height="170dip"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dimen_10"
-                android:background="@drawable/idcard_example_front">
+                android:background="@drawable/ic_back_light">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -186,11 +127,11 @@
                     android:id="@+id/imageViewBack"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="@dimen/dimen_03"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/dimen_10"
                     android:layout_marginRight="@dimen/dimen_03"
+                    android:layout_marginBottom="@dimen/dimen_03"
                     android:paddingLeft="@dimen/dimen_10"
                     android:src="@drawable/authentication_example_ok" />
             </RelativeLayout>

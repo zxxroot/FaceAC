@@ -3,42 +3,24 @@ package com.phone.uin.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapRegionDecoder;
-import android.graphics.Matrix;
-import android.graphics.Rect;
+import android.content.pm.FeatureInfo;
+import android.content.pm.PackageManager;
+import android.graphics.*;
 import android.hardware.Camera;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
+import android.hardware.camera2.CameraManager;
+import android.os.*;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.OrientationEventListener;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.ScaleAnimation;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.phone.uin.R;
 import com.phone.uin.utils.FileUtils;
 import com.phone.uin.widget.CustomCameraPreview;
 import com.phone.uin.widget.LoadingDialog;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Created by zhangxingsheng on 2017/7/10.
@@ -49,10 +31,13 @@ public class ShootIdCardActivity extends Activity implements View.OnClickListene
     private TextView tvTitle, tvCancle, tvTips;
     private String tips;
     private ImageView takePic;
+    private ImageView openLight;
     private int tag;
     private ImageView photo_idcard_bg;
     private CustomCameraPreview preview;
     private Camera camera;
+    private CameraManager manager;// 声明CameraManager对象
+//    private Camera camera = null;// 声明Camera对象
     private int mCurrentCameraId = 0; // 1是前置 0是后置
     private Context mContext;
     private Boolean mCurrentOrientation = true; // 当前设备方向 横屏false,竖屏true
@@ -68,11 +53,13 @@ public class ShootIdCardActivity extends Activity implements View.OnClickListene
     private int PHOTO_SIZE_W = 2000;
     private int PHOTO_SIZE_H = 2000;
     private View focusIndex;
-
+    private boolean lightStatus = false;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shoot_id_card_layout);
+        manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         mContext = this;
         this.init();
     }
@@ -90,6 +77,7 @@ public class ShootIdCardActivity extends Activity implements View.OnClickListene
         this.tvCancle = (TextView) findViewById(R.id.tvCancle);
         this.mSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         this.takePic = (ImageView) findViewById(R.id.takePic);
+        this.openLight = (ImageView) findViewById(R.id.openLight);
         this.photo_idcard_bg = (ImageView) findViewById(R.id.photo_idcard_bg);
         this.tag = getIntent().getIntExtra("tag", 0);
         this.tips = getIntent().getStringExtra("tips");
@@ -117,6 +105,7 @@ public class ShootIdCardActivity extends Activity implements View.OnClickListene
     private void addListener() {
         this.tvCancle.setOnClickListener(this);
         this.takePic.setOnClickListener(this);
+        this.openLight.setOnClickListener(this);
         this.mSurfaceView.setOnTouchListener(this);
     }
 
@@ -127,6 +116,8 @@ public class ShootIdCardActivity extends Activity implements View.OnClickListene
             ShootIdCardActivity.this.finish();
         } else if (id == R.id.takePic) {
             takePhoto();
+        } else if (id == R.id.openLight) {
+            openLight(this.lightStatus);
         }
     }
 
@@ -144,6 +135,51 @@ public class ShootIdCardActivity extends Activity implements View.OnClickListene
             } catch (Throwable e) {
 
             }
+        }
+    }
+
+    /**
+     * 打开关闭手电筒
+     */
+    private void openLight(boolean lightStatus) {
+        if (lightStatus) { // 关闭手电筒
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                try {
+                    manager.setTorchMode("0", false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                if (camera != null) {
+                    camera.stopPreview();
+                    camera.release();
+                    camera = null;
+                }
+            }
+            this.lightStatus = false;
+        } else { // 打开手电筒
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                try {
+                    manager.setTorchMode("0", true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final PackageManager pm = getPackageManager();
+                final FeatureInfo[] features = pm.getSystemAvailableFeatures();
+                for (final FeatureInfo f : features) {
+                    if (PackageManager.FEATURE_CAMERA_FLASH.equals(f.name)) { // 判断设备是否支持闪光灯
+                        if (null == camera) {
+                            camera = Camera.open();
+                        }
+                        final Camera.Parameters parameters = camera.getParameters();
+                        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                        camera.setParameters(parameters);
+                        camera.startPreview();
+                    }
+                }
+            }
+            this.lightStatus = true;
         }
     }
 

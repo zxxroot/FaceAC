@@ -26,6 +26,31 @@
         android:text="@string/immortal_approve_tips"
         android:textColor="@color/bg_color"
         android:textSize="@dimen/size_14" />
+    <Button
+        android:id="@+id/btnGoScanCamera"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/public_title_height"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_marginRight="@dimen/dimen_10"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:background="@drawable/complete_btn_selector"
+        android:padding="@dimen/dimen_05"
+        android:text="@string/go_scan_camera_txt"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_16" />
+
+    <Button
+        android:id="@+id/btnGoIdentify"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/public_title_height"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_marginRight="@dimen/dimen_10"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:background="@drawable/complete_btn_selector"
+        android:padding="@dimen/dimen_05"
+        android:text="@string/go_identify_txt"
+        android:textColor="@color/white"
+        android:textSize="@dimen/size_16" />
 
     <Button
         android:id="@+id/btnGoImmortal"
@@ -33,7 +58,7 @@
         android:layout_height="@dimen/public_title_height"
         android:layout_marginLeft="@dimen/dimen_10"
         android:layout_marginRight="@dimen/dimen_10"
-        android:layout_marginTop="@dimen/dimen_40"
+        android:layout_marginTop="@dimen/dimen_20"
         android:background="@drawable/complete_btn_selector"
         android:padding="@dimen/dimen_05"
         android:text="@string/go_immortal_txt"

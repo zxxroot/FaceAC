@@ -32,6 +32,9 @@
         <activity
             android:name=".ui.RecordVideoActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.ScanCameraActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
     <!--访问INTERNET的权限-->
@@ -55,4 +58,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!--手机信息-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 </manifest>

@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">FaceAC</string>
+    <string name="go_scan_camera_txt">去扫描证件</string>
+    <string name="go_identify_txt">去身份认证</string>
     <string name="shoot_id_card_front">拍摄身份证正面</string>
     <string name="id_card_front">身份证正面</string>
     <string name="shoot_id_card_side">拍摄身份证反面</string>

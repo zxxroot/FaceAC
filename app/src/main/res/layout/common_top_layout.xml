@@ -2,6 +2,8 @@
 
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#052347"
+    android:layout_height="60dp"
     style="@style/TitleStyle">
 
     <ImageView
@@ -12,7 +14,9 @@
     <TextView
         android:id="@+id/tvTitle"
         style="@style/titleTextStyle"
-        android:text="这是标题" />
+        android:text="身份证检测"
+        android:textColor="@color/white"
+        />
 
 </RelativeLayout>
 

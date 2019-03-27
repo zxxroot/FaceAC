@@ -61,9 +61,6 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
 
     private ImageView showIvIdCardBack;
     private ImageView imageViewBack;
-
-    private EditText etName;
-    private EditText etIdCard;
     private String TAG = IdentifyVerifyActivity.class.getSimpleName();
     private List<String> list = new ArrayList<>();
     /**
@@ -99,8 +96,6 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
         this.imageViewFront = (ImageView) findViewById(R.id.imageViewFront);
         this.showIvIdCardBack = (ImageView) findViewById(R.id.showIvIdCardBack);
         this.imageViewBack = (ImageView) findViewById(R.id.imageViewBack);
-        this.etName = (EditText) findViewById(R.id.etName);
-        this.etIdCard = (EditText) findViewById(R.id.etIdCard);
     }
 
     private void initData() {
@@ -114,55 +109,13 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
         this.ivIdCardBack.setOnClickListener(this);
         this.imageViewFront.setOnClickListener(this);
         this.imageViewBack.setOnClickListener(this);
-        this.etName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                btnSubmit.setTextColor(getResources().getColor(R.color.submit_color));
-                btnSubmit.setEnabled(false);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-                    btnSubmit.setTextColor(getResources().getColor(R.color.white));
-                    btnSubmit.setEnabled(true);
-                }
-            }
-        });
-        this.etIdCard.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                btnSubmit.setTextColor(getResources().getColor(R.color.submit_color));
-                btnSubmit.setEnabled(false);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-                    btnSubmit.setTextColor(getResources().getColor(R.color.white));
-                    btnSubmit.setEnabled(true);
-                }
-            }
-        });
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.submit) {
-            if (valiator()) {
-                uploadIdCardInfo();
-            }
+            uploadIdCardInfo();
         } else if (id == R.id.arrowsBack) {
             IdentifyVerifyActivity.this.finish();
         } else if (id == R.id.ivIdCardFront) {
@@ -205,57 +158,6 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-
-    private boolean valiator() {
-        // 数字
-        Pattern p = Pattern.compile("[0-9]*");
-        //通过Pattern获得Matcher
-        Matcher idNumMatcher = idNumPattern.matcher(etIdCard.getText().toString().trim());
-        // 特殊字符
-        String limitEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-        if (TextUtils.isEmpty(etName.getText().toString().trim())) {
-            Toast.makeText(this, "姓名不能为空！", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        Matcher m = p.matcher(etName.getText().toString().trim());
-        if (m.matches()) {
-            Toast.makeText(this, "姓名不允许输入数字！", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        Pattern pattern = Pattern.compile(limitEx);
-        Matcher mLimitEx = pattern.matcher(etName.getText().toString().trim());
-
-        if (mLimitEx.find()) {
-            Toast.makeText(this, "姓名不允许输入特殊符号！", Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        if (TextUtils.isEmpty(etIdCard.getText().toString().trim())) {
-            Toast.makeText(this, "身份证号码不能为空！", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (etIdCard.getText().toString().trim().length() != 15 && etIdCard.getText().toString().trim().length() != 18) {
-            Toast.makeText(this, "身份证号码长度应该为15位或18位!", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!idNumMatcher.matches()) {
-            Toast.makeText(this, "请输入有效的身份证号码！", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (TextUtils.isEmpty(frontUrl)) {
-            Toast.makeText(this, "请拍摄身份证正面照片！", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (TextUtils.isEmpty(backUrl)) {
-            Toast.makeText(this, "请拍摄身份证反面照片！", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
     @Override

@@ -19,6 +19,8 @@ import com.phone.uin.widget.HomeKeyListener;
  */
 public class ImmortalApproveActivity extends AppCompatActivity implements View.OnClickListener {
     private Button btnGoImmortal;
+    private Button btnGoIdentify;
+    private Button btnGoScanCamera;
     private TextView tvTitle;
     private ImageView arrowsBack;
     private HomeKeyListener homeKeyListener;
@@ -109,12 +111,16 @@ public class ImmortalApproveActivity extends AppCompatActivity implements View.O
 
     private void initModule() {
         this.btnGoImmortal = (Button) findViewById(R.id.btnGoImmortal);
+        this.btnGoIdentify = (Button) findViewById(R.id.btnGoIdentify);
+        this.btnGoScanCamera = (Button) findViewById(R.id.btnGoScanCamera);
         this.tvTitle = (TextView) findViewById(R.id.tvTitle);
         this.arrowsBack = (ImageView) findViewById(R.id.arrowsBack);
     }
 
     private void addListener() {
         this.btnGoImmortal.setOnClickListener(this);
+        this.btnGoIdentify.setOnClickListener(this);
+        this.btnGoScanCamera.setOnClickListener(this);
         this.arrowsBack.setOnClickListener(this);
     }
 
@@ -129,6 +135,10 @@ public class ImmortalApproveActivity extends AppCompatActivity implements View.O
             startActivity(new Intent(ImmortalApproveActivity.this, FaceVerifyActivity.class));
         } else if (id == R.id.arrowsBack) {
             ImmortalApproveActivity.this.finish();
+        } else if (id == R.id.btnGoIdentify) {
+            startActivity(new Intent(ImmortalApproveActivity.this, IdentifyVerifyActivity.class));
+        } else if (id == R.id.btnGoScanCamera) {
+            startActivity(new Intent(ImmortalApproveActivity.this, ScanCameraActivity.class));
         }
     }
 
