@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.phone.uin.faceac"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -27,14 +27,14 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     // json 解析
-    compile 'com.alibaba:fastjson:1.2.9'
-    compile 'com.android.support:appcompat-v7:25.0.0'
+    implementation 'com.alibaba:fastjson:1.2.9'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
     // 6.0动态权限
-    compile 'com.github.hotchemi:permissionsdispatcher:2.3.2'
+    implementation 'com.github.hotchemi:permissionsdispatcher:2.3.2'
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.2'
-    compile 'com.github.pqpo:SmartCamera:v1.3.2'
-//    compile 'com.github.tbruyelle:rxpermissions:0.10.2'
-    compile 'com.anthonycr.grant:permissions:1.0'
+    implementation 'com.github.pqpo:SmartCamera:v1.3.2'
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'com.anthonycr.grant:permissions:1.0'
 }
