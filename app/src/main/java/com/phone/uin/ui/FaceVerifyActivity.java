@@ -77,7 +77,16 @@ public class FaceVerifyActivity extends AppCompatActivity implements View.OnClic
 
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,Manifest.permission.VIBRATE,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})
     void showCamera() {
-        startActivity(new Intent(FaceVerifyActivity.this, RecordVideoActivity.class));
+        Intent intent = new Intent(new Intent(FaceVerifyActivity.this, RecordVideoActivity.class));
+        String base64Front = getIntent().getStringExtra("base64Front");
+        String base64Back = getIntent().getStringExtra("base64Back");
+        if(null!= base64Front && !"".equals(base64Front)){
+            intent.putExtra("base64Front", base64Front);
+        }
+        if(null!= base64Back && !"".equals(base64Back)){
+            intent.putExtra("base64Back", base64Back);
+        }
+        startActivity(intent);
     }
 
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,Manifest.permission.VIBRATE,Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})

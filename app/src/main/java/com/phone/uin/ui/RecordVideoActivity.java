@@ -27,6 +27,7 @@ import com.iflytek.cloud.FaceDetector;
 import com.iflytek.cloud.util.Accelerometer;
 import com.phone.uin.R;
 import com.phone.uin.http.HttpUploadUtils;
+import com.phone.uin.http.HttpUtils;
 import com.phone.uin.http.UrlApi;
 import com.phone.uin.model.BaseResponse;
 import com.phone.uin.utils.FaceRect;
@@ -51,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 
 /**
@@ -502,14 +504,35 @@ public class RecordVideoActivity extends Activity implements View.OnClickListene
             this.isRecord = false;
             this.mStopTrack = false;
             this.isClickHome = false;//是否按下了home键
-            uploadVedio();
+//            uploadVedio();
+            identityPhotoAuth();
+
         }
     }
+
+    private void identityPhotoAuth() {
+        LoadingDialog.showDialog(mContext, "文件上传中,请稍后...", false);
+        final Map<String, String> params = new HashMap<>();
+        params.put("frontImage", getIntent().getStringExtra("base64Front"));
+        params.put("backImage", getIntent().getStringExtra("base64Back"));
+        params.put("realImage", getIntent().getStringExtra("base64Back"));
+        params.put("orderId", UUID.randomUUID().toString().replaceAll("-", ""));
+        params.put("appkey", UrlApi.IdentityAuth.appkey);
+        params.put("appsecret", UrlApi.IdentityAuth.appsecret);
+        new Thread() {
+            @Override
+            public void run() {
+                //把网络访问的代码放在这里
+                HttpUtils.requestPost(UrlApi.IdentityAuth.identity_photo_auth_url, params);
+            }
+        }.start();
+    }
+
 
     /**
      * 上传视频文件
      */
-    public void uploadVedio() {
+    /*public void uploadVedio() {
         LoadingDialog.showDialog(mContext, "文件上传中,请稍后...", false);
         TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 //        String android_imsi = tm.getSubscriberId();//获取手机IMSI号
@@ -544,7 +567,7 @@ public class RecordVideoActivity extends Activity implements View.OnClickListene
             }
         }.start();
 
-    }
+    }*/
 
     /**
      * 获取手机ip

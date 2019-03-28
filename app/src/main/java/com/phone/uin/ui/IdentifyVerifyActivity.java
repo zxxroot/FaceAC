@@ -1,5 +1,4 @@
 package com.phone.uin.ui;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +25,7 @@ import com.phone.uin.model.BaseResponse;
 import com.phone.uin.utils.FileUtils;
 import com.phone.uin.utils.JsonUtil;
 import com.phone.uin.utils.MD5Util;
+import com.phone.uin.utils.PictureUtil;
 import com.phone.uin.utils.StaticArguments;
 import com.phone.uin.widget.LoadingDialog;
 
@@ -39,13 +39,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
 /**
- * Created by zhangxingsheng on 2017/6/20.
+ * Created by zhangxingxing on 2017/6/20.
  * 身份认证
  */
-
 public class IdentifyVerifyActivity extends Activity implements View.OnClickListener {
     private TextView tvTitle;
     private Button btnSubmit;
@@ -63,13 +60,13 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
     private ImageView imageViewBack;
     private String TAG = IdentifyVerifyActivity.class.getSimpleName();
     private List<String> list = new ArrayList<>();
-    /**
-     * 正则表达式：验证身份证
-     */
-    Pattern idNumPattern = Pattern.compile("(^[1-9]\\d{5}(18|19|([23]\\d))\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{3}[0-9Xx]$)|(^[1-9]\\d{5}\\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\\d{2}$)");
+
+    private String base64Front;
+    private String base64Back;
 
     private String frontUrl;
     private String backUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,39 +112,38 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.submit) {
-            uploadIdCardInfo();
+//            uploadIdCardInfo();
+            if(TextUtils.isEmpty(base64Front)){
+                Toast.makeText(IdentifyVerifyActivity.this, "请上传身份证正面!", Toast.LENGTH_LONG).show();
+            }else if (TextUtils.isEmpty(base64Back)) {
+                Toast.makeText(IdentifyVerifyActivity.this, "请上传身份证反面!", Toast.LENGTH_LONG).show();
+            }
+            Intent intent = new Intent(IdentifyVerifyActivity.this, FaceVerifyActivity.class);
+            intent.putExtra("base64Front", base64Front);
+            intent.putExtra("base64Back", base64Back);
+            startActivityForResult(intent, SHOOT_ID_CARD_FRONT_RESULT);
         } else if (id == R.id.arrowsBack) {
             IdentifyVerifyActivity.this.finish();
         } else if (id == R.id.ivIdCardFront) {
-            Intent intent = new Intent(IdentifyVerifyActivity.this, ShootIdCardActivity.class);
+            Intent intent = new Intent(IdentifyVerifyActivity.this, ScanCameraActivity.class);
             String tips = getResources().getString(R.string.shoot_id_card_front);
             intent.putExtra("tips", tips);
             intent.putExtra("tag", 0);
             startActivityForResult(intent, SHOOT_ID_CARD_FRONT_RESULT);
         } else if (id == R.id.ivIdCardBack) {
-            Intent intent = new Intent(IdentifyVerifyActivity.this, ShootIdCardActivity.class);
+            Intent intent = new Intent(IdentifyVerifyActivity.this, ScanCameraActivity.class);
             String tips = getResources().getString(R.string.shoot_id_card_side);
             intent.putExtra("tips", tips);
             intent.putExtra("tag", 1);
             startActivityForResult(intent, SHOOT_ID_CARD_SIDE_RESULT);
         } else if (id == R.id.imageViewFront) {
-            if (null == list) {
-                list = new ArrayList<>();
-            }
-            list.add(frontUrl);
-            FileUtils.delFile(list);
-            Intent intent = new Intent(IdentifyVerifyActivity.this, ShootIdCardActivity.class);
+            Intent intent = new Intent(IdentifyVerifyActivity.this, ScanCameraActivity.class);
             String tips = getResources().getString(R.string.shoot_id_card_front);
             intent.putExtra("tips", tips);
             intent.putExtra("tag", 0);
             startActivityForResult(intent, SHOOT_ID_CARD_FRONT_RESULT);
         } else if (id == R.id.imageViewBack) {
-            if (null == list) {
-                list = new ArrayList<>();
-            }
-            list.add(backUrl);
-            FileUtils.delFile(list);
-            Intent intent = new Intent(IdentifyVerifyActivity.this, ShootIdCardActivity.class);
+            Intent intent = new Intent(IdentifyVerifyActivity.this, ScanCameraActivity.class);
             String tips = getResources().getString(R.string.shoot_id_card_side);
             intent.putExtra("tips", tips);
             intent.putExtra("tag", 1);
@@ -168,12 +164,12 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
                 case RESULT_OK:
                     Bitmap bitmap = null;
                     Bundle b = data.getExtras(); //data为B中回传的Intent
-                    frontUrl = b.getString("frontUrl");//str即为回传的值
-                    if (!TextUtils.isEmpty(frontUrl)) {
+                    base64Front = b.getString("base64Front");//str即为回传的值
+                    if (!TextUtils.isEmpty(base64Front)) {
                         ivIdCardFront.setVisibility(View.GONE);
                         linearLayoutShowFront.setVisibility(View.VISIBLE);
                         showIvIdCardFront.setVisibility(View.VISIBLE);
-                        bitmap = getCompressPhoto(frontUrl);
+                        bitmap = PictureUtil.base64ToBitmap(base64Front);
                         showIvIdCardFront.setImageBitmap(bitmap); //设置Bitmap
                         btnSubmit.setTextColor(getResources().getColor(R.color.white));
                         btnSubmit.setEnabled(true);
@@ -192,11 +188,11 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
                 case RESULT_OK:
                     Bitmap bitmap = null;
                     Bundle b = data.getExtras(); //data为B中回传的Intent
-                    backUrl = b.getString("backUrl");//str即为回传的值
-                    if (!TextUtils.isEmpty(backUrl)) {
+                    base64Back = b.getString("base64Back");//str即为回传的值
+                    if (!TextUtils.isEmpty(base64Back)) {
                         ivIdCardBack.setVisibility(View.GONE);
                         linearLayoutShowBack.setVisibility(View.VISIBLE);
-                        bitmap = getCompressPhoto(backUrl);
+                        bitmap = PictureUtil.base64ToBitmap(base64Back);
                         showIvIdCardBack.setImageBitmap(bitmap); //设置Bitmap
                         btnSubmit.setTextColor(getResources().getColor(R.color.white));
                         btnSubmit.setEnabled(true);
@@ -332,7 +328,6 @@ public class IdentifyVerifyActivity extends Activity implements View.OnClickList
 
     /**
      * 把原图按1/2的比例压缩
-     *
      * @param path 原图的路径
      * @return 压缩后的图片
      */

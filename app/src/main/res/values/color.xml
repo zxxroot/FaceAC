@@ -11,4 +11,5 @@
     <color name="input_id_card_info">#f0f0f0</color>
     <color name="horizontal_line">#eeeeee</color>
     <color name="transparent">#55000000</color>
+    <color name="scan_color">#525451</color>
 </resources>

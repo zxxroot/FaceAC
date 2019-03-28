@@ -43,7 +43,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dimen_08"
                     android:text="@string/id_card_front"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/dimen_16" />
             </RelativeLayout>
 
@@ -98,7 +98,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dimen_08"
                     android:text="@string/id_card_side"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/dimen_16" />
             </RelativeLayout>
 
@@ -142,8 +142,9 @@
 
     <Button
         android:id="@+id/submit"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/public_title_height"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/dimen_15"
         android:layout_marginLeft="@dimen/dimen_10"
@@ -151,8 +152,9 @@
         android:layout_marginTop="@dimen/dimen_10"
         android:background="@drawable/complete_btn_selector"
         android:enabled="false"
-        android:padding="@dimen/dimen_05"
-        android:text="@string/submit"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:text="下一步，活体检测"
         android:textColor="@color/submit_color"
         android:textSize="@dimen/size_16" />
 

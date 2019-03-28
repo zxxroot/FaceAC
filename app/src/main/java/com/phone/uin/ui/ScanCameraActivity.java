@@ -1,13 +1,11 @@
 package com.phone.uin.ui;
-
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,13 +13,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.anthonycr.grant.PermissionsManager;
-import com.anthonycr.grant.PermissionsResultAction;
 import com.google.android.cameraview.CameraImpl;
 import com.phone.uin.R;
+import com.phone.uin.utils.PictureUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import me.pqpo.smartcameralib.MaskView;
@@ -38,6 +33,8 @@ class ScanCameraActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
     private ImageView ivDialog;
     private boolean granted = false;
+    private int tag;
+    private String tips;
 
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -51,8 +48,8 @@ class ScanCameraActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scan_camera_layout);
-        mCameraView = (SmartCameraView) findViewById(R.id.camera_view);
-        ivPreview = (ImageView) findViewById(R.id.image);
+        mCameraView = findViewById(R.id.camera_view);
+        ivPreview = findViewById(R.id.image);
         ivPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +57,8 @@ class ScanCameraActivity extends AppCompatActivity {
                 mCameraView.stopScan();
             }
         });
+        this.tag = getIntent().getIntExtra("tag", 0);
+        this.tips = getIntent().getStringExtra("tips");
         initMaskView();
         initScannerParams();
         initCameraView();
@@ -104,8 +103,8 @@ class ScanCameraActivity extends AppCompatActivity {
           2. 高于阈值2的像素点会被认为是边缘；
           3. 在阈值1和阈值2之间的像素点,若与第2步得到的边缘像素点相邻，则被认为是边缘，否则被认为不是边缘。
          */
-        SmartScanner.cannyThreshold1 = 20; //canny 算符阈值1
-        SmartScanner.cannyThreshold2 = 50; //canny 算符阈值2
+        SmartScanner.cannyThreshold1 = 10; //canny 算符阈值1
+        SmartScanner.cannyThreshold2 = 40; //canny 算符阈值2
         /*
          * 霍夫变换检测线段参数
          * 1. threshold: 最小投票数，要检测一条直线所需最少的的曲线交点，增大该值会减少检测出的线段数量。
@@ -121,7 +120,7 @@ class ScanCameraActivity extends AppCompatActivity {
         SmartScanner.gaussianBlurRadius = 3;
 
         // 检测范围比例, 比例越小表示待检测物体要更靠近边框
-        SmartScanner.detectionRatio = 0.1f;
+        SmartScanner.detectionRatio = 0.3f;
         // 线段最小长度检测比例
         SmartScanner.checkMinLengthRatio = 0.8f;
         // 为了提高性能，检测的图片会缩小到该尺寸之内
@@ -168,7 +167,8 @@ class ScanCameraActivity extends AppCompatActivity {
                     @Override
                     public void onCropped(Bitmap cropBitmap) {
                         if (cropBitmap != null) {
-                            showPicture(cropBitmap);
+//                            showPicture(cropBitmap);
+                            callBackDate(cropBitmap);
                         }
                     }
                 });
@@ -200,6 +200,23 @@ class ScanCameraActivity extends AppCompatActivity {
             }
         });
         mCameraView.setMaskView(maskView);
+    }
+
+    private void callBackDate(Bitmap bitmap) {
+        Bundle bundle = new Bundle();
+        Intent mIntent = new Intent();
+        String base64Img = PictureUtil.bitmapToString(bitmap);
+        bundle.putInt("tag", tag);
+        if (tag == 0) {
+            bundle.putString("base64Front", base64Img);
+        } else {
+            bundle.putString("base64Back", base64Img);
+        }
+        mIntent.putExtras(bundle);
+        // 设置结果，并进行传送
+        setResult(RESULT_OK, mIntent);
+        finish();
+
     }
 
     private void showPicture(Bitmap bitmap) {
