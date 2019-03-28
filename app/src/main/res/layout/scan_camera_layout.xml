@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.ScanCameraActivity">
+
+    <me.pqpo.smartcameralib.SmartCameraView
+        android:id="@+id/camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="117dp"
+        android:layout_height="180dp"
+        android:scaleType="fitCenter"
+        android:layout_alignParentBottom="true"
+        android:src="@mipmap/ic_launcher" />
+
+</RelativeLayout>
